@@ -14,55 +14,23 @@ import (
 )
 
 var homeHtml = `
-		<style>
-		.text {
-			padding: .5rem 1rem;
-			font-size: 1.25rem;
-			line-height: 1.5;
-			border-radius: .3rem;
-			display: inline-block;
-			width: 85%;
-			color: #495057;
-			background-color: #fff;
-			background-clip: padding-box;
-			border: 1px solid #ced4da;
-		}
-		.button {
-			cursor: pointer;
-			color: #fff;
-			background-color: #007bff;
-			border-color: #007bff;
-		  	display: inline-block;
-			font-weight: 400;
-			text-align: center;
-			white-space: nowrap;
-			vertical-align: middle;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
-			padding: .7rem 1.5rem;
-			font-size: 1rem;
-			line-height: 1.5;
-			border-radius: .25rem;
-    		margin-top: -8px;
-		}
-		</style>
-		<div style="margin: 15% 1% 25% 1%;">
-			<h2 style="font-family: sans-serif">Enter HTTP URL to zip and download</h2>
-			<form action="/download">
-				<div>
-					<span><input type="text" name="url" placeholder="Enter HTTP URL" class="text" /></span>
-					<span><input type="submit" value="Zip and Download" class="button" /></span>
-				</div>
-			</form>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<h1 style="text-align: center; margin-top: 5%;">Ziply: Zip&Download URL content</h1>
+<div style="margin: 10% 1% 20% 1%;">
+	<form action="/dl">
+		<div>
+			<input type="text" name="url" placeholder="Enter HTTP URL to zip and download" class="form-control form-control-lg" required />
+			<div style="width: 20%; margin: 20px 0 0 40%;">
+				<input type="submit" value="Zip and Download" class="btn btn-primary btn-lg btn-block"/>
+			</div>
 		</div>
-		<div style="text-align: center; font-family: sans-serif; font-size: small">
-		<a href="https://github.com/mhewedy/ziply" target="_blank">
-			<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
-		</a>
-		</div>
-		`
+	</form>
+</div>
+<div style="text-align: center;">
+<a href="https://github.com/mhewedy/ziply" target="_blank">
+	<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
+</a>
+</div>`
 
 func main() {
 
@@ -71,7 +39,7 @@ func main() {
 		fmt.Fprintln(w, homeHtml)
 	})
 
-	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/dl", func(w http.ResponseWriter, r *http.Request) {
 
 		urls := r.URL.Query()["url"]
 		if len(urls) == 0 || strings.TrimSpace(urls[0]) == "" {

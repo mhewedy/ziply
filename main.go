@@ -34,8 +34,8 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	fmt.Println("started...")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-
 }
 
 func downloadAndZip(exeURL string) (*bytes.Buffer, error) {

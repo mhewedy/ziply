@@ -17,23 +17,26 @@ import (
 
 var homePageTpl, _ = template.New("").Parse(
 	`<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<h1 style="text-align: center; margin-top: 5%;">Ziply: Zip&Download URL content</h1>
-	<div style="margin: 10% 1% 20% 1%;">
-		<form action="/dl">
-			<div>
-				<input type="text" name="url" placeholder="Enter HTTP URL to zip and download"
-					class="form-control form-control-lg" required value="{{ .URL}}" />
-				<div style="width: 20%; margin: 20px 0 0 40%;">
-					<input type="submit" value="Zip and Download" class="btn btn-primary btn-lg btn-block"/>
-				</div>
+			<h1 style="text-align: center; margin-top: 5%;">
+				<span style="color: #007bff; font-family: monospace; font-size: 60px; ">Ziply</span>
+				<span style="font-family: sans-serif">: Zip&Download URL content</span>
+				</h1>
+			<div style="margin: 10% 1% 20% 1%;">
+				<form action="/dl">
+					<div>
+						<input type="text" name="url" placeholder="Enter HTTP URL to zip and download"
+							class="form-control form-control-lg" required value="{{ .URL}}" />
+						<div style="width: 20%; margin: 20px 0 0 40%;">
+							<input type="submit" value="Zip and Download" class="btn btn-primary btn-lg btn-block"/>
+						</div>
+					</div>
+				</form>
 			</div>
-		</form>
-	</div>
-	<div style="text-align: center;">
-	<a href="https://github.com/mhewedy/ziply" target="_blank">
-		<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
-	</a>
-	</div>`)
+			<div style="text-align: center;">
+			<a href="https://github.com/mhewedy/ziply" target="_blank">
+				<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
+			</a>
+			</div>`)
 
 func main() {
 

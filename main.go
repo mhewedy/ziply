@@ -55,7 +55,7 @@ func sendError(w http.ResponseWriter, msg string, code int) {
 }
 
 func downloadAndZip(exeURL string) (*bytes.Buffer, error) {
-	fmt.Printf("Getting %s...\n", exeURL)
+	fmt.Printf("getting %s...\n", exeURL)
 
 	resp, err := http.Get(exeURL)
 	if err != nil {
@@ -70,33 +70,30 @@ func downloadAndZip(exeURL string) (*bytes.Buffer, error) {
 		return nil, err
 	}
 
-	return zipBuffer(&buff, path.Base(exeURL))
+	return doZip(&buff, path.Base(exeURL))
 }
 
-func zipBuffer(in *bytes.Buffer, name string) (*bytes.Buffer, error) {
+func doZip(in *bytes.Buffer, name string) (*bytes.Buffer, error) {
 
-	fmt.Printf("Zipping %s...\n", name)
+	fmt.Printf("zipping %s...\n", name)
 
-	// Create a buffer to write our archive to.
-	buf := new(bytes.Buffer)
-
-	// Create a new zip archive.
-	w := zip.NewWriter(buf)
+	var buf bytes.Buffer
+	w := zip.NewWriter(&buf)
 
 	f, err := w.Create(name)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
+
 	_, err = f.Write(in.Bytes())
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	// Make sure to check the error on Close.
 	err = w.Close()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return buf, nil
+	return &buf, nil
 }

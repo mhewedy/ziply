@@ -15,18 +15,24 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
-		url := r.URL.Query()["url"][0]
+		urls := r.URL.Query()["url"]
+		if len(urls) == 0 {
+			sendError(w, "missing url parameter", http.StatusBadRequest)
+			return
+		}
 
-		zipped, _ := downloadAndZip(url)
-		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, path.Base(url)+".zip"))
-		_, err := w.Write(zipped.Bytes())
+		zipped, err := downloadAndZip(urls[0])
+		if err != nil {
+			sendError(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, path.Base(urls[0])+".zip"))
+		_, err = w.Write(zipped.Bytes())
 
 		if err != nil {
-			_, err = w.Write([]byte(err.Error()))
-			if err != nil {
-				log.Println(err)
-			}
-			w.WriteHeader(http.StatusInternalServerError)
+			sendError(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	})
 
@@ -36,6 +42,11 @@ func main() {
 	}
 	fmt.Println("started...")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+
+func sendError(w http.ResponseWriter, msg string, code int) {
+	_, _ = w.Write([]byte(msg))
+	w.WriteHeader(code)
 }
 
 func downloadAndZip(exeURL string) (*bytes.Buffer, error) {

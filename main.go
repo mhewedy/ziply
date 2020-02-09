@@ -14,7 +14,11 @@ import (
 
 func main() {
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+
+	})
+
+	http.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
 
 		urls := r.URL.Query()["url"]
 		if len(urls) == 0 {
@@ -30,7 +34,6 @@ func main() {
 
 		fileName := path.Base(urls[0]) + ".zip"
 		fmt.Printf("downloading %s\n", fileName)
-
 		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
 		w.Header().Set("Content-Length", strconv.Itoa(zipped.Len()))
 		_, err = w.Write(zipped.Bytes())
@@ -55,6 +58,7 @@ func sendError(w http.ResponseWriter, msg string, code int) {
 }
 
 func downloadAndZip(exeURL string) (*bytes.Buffer, error) {
+
 	fmt.Printf("getting %s...\n", exeURL)
 
 	resp, err := http.Get(exeURL)
@@ -63,14 +67,13 @@ func downloadAndZip(exeURL string) (*bytes.Buffer, error) {
 	}
 	defer resp.Body.Close()
 
-	var buff bytes.Buffer
-
-	_, err = io.Copy(&buff, resp.Body)
+	var buf bytes.Buffer
+	_, err = io.Copy(&buf, resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return doZip(&buff, path.Base(exeURL))
+	return doZip(&buf, path.Base(exeURL))
 }
 
 func doZip(in *bytes.Buffer, name string) (*bytes.Buffer, error) {

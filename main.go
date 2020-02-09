@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"bytes"
+	"errors"
 	"fmt"
 	"html/template"
 	"io"
@@ -95,6 +96,10 @@ func downloadAndZip(exeURL string) (*bytes.Buffer, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New(fmt.Sprintf("cannot download file, status code: (%s)", resp.Status))
+	}
 
 	var buf bytes.Buffer
 	_, err = io.Copy(&buf, resp.Body)

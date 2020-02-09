@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -13,30 +14,37 @@ import (
 	"strings"
 )
 
-var homeHtml = `
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<h1 style="text-align: center; margin-top: 5%;">Ziply: Zip&Download URL content</h1>
-<div style="margin: 10% 1% 20% 1%;">
-	<form action="/dl">
-		<div>
-			<input type="text" name="url" placeholder="Enter HTTP URL to zip and download" class="form-control form-control-lg" required />
-			<div style="width: 20%; margin: 20px 0 0 40%;">
-				<input type="submit" value="Zip and Download" class="btn btn-primary btn-lg btn-block"/>
-			</div>
+var homePageTpl, _ = template.New("").Parse(
+	`<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<h1 style="text-align: center; margin-top: 5%;">Ziply: Zip&Download URL content</h1>
+		<div style="margin: 10% 1% 20% 1%;">
+			<form action="/dl">
+				<div>
+					<input type="text" name="url" placeholder="Enter HTTP URL to zip and download"
+						class="form-control form-control-lg" required value="{{ .URL}}" />
+					<div style="width: 20%; margin: 20px 0 0 40%;">
+						<input type="submit" value="Zip and Download" class="btn btn-primary btn-lg btn-block"/>
+					</div>
+				</div>
+			</form>
 		</div>
-	</form>
-</div>
-<div style="text-align: center;">
-<a href="https://github.com/mhewedy/ziply" target="_blank">
-	<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
-</a>
-</div>`
+		<div style="text-align: center;">
+		<a href="https://github.com/mhewedy/ziply" target="_blank">
+			<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
+		</a>
+		</div>`)
 
 func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintln(w, homeHtml)
+
+		urls := r.URL.Query()["url"]
+		if len(urls) > 0 {
+			homePageTpl.Execute(w, struct{ URL string }{URL: urls[0]})
+		} else {
+			homePageTpl.Execute(w, struct{ URL string }{URL: ""})
+		}
 	})
 
 	http.HandleFunc("/dl", func(w http.ResponseWriter, r *http.Request) {

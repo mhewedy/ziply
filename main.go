@@ -48,7 +48,7 @@ var homeHtml = `
     		margin-top: -8px;
 		}
 		</style>
-		<div style="margin: 15% 1% 1% 1%;">
+		<div style="margin: 15% 1% 25% 1%;">
 			<h2 style="font-family: sans-serif">Enter HTTP URL to zip and download</h2>
 			<form action="/download">
 				<div>
@@ -56,6 +56,11 @@ var homeHtml = `
 					<span><input type="submit" value="Zip and Download" class="button" /></span>
 				</div>
 			</form>
+		</div>
+		<div style="text-align: center; font-family: sans-serif; font-size: small">
+		<a href="https://github.com/mhewedy/ziply" target="_blank">
+			<img alt="github" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="30px">
+		</a>
 		</div>
 		`
 

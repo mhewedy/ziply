@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strconv"
 )
 
 func main() {
@@ -27,7 +28,11 @@ func main() {
 			return
 		}
 
-		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, path.Base(urls[0])+".zip"))
+		fileName := path.Base(urls[0]) + ".zip"
+		fmt.Printf("downloading %s\n", fileName)
+
+		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
+		w.Header().Set("Content-Length", strconv.Itoa(zipped.Len()))
 		_, err = w.Write(zipped.Bytes())
 
 		if err != nil {

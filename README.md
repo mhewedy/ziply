@@ -12,10 +12,12 @@ This is safe. You are seeing the code and you deploying it yourself, so no chanc
 
 ## Usage:
 
+Navigate to the home page: `http://<host:port>` (e.g. https://ziply.herokuapp.com/)
+
+Or use the API directly:
 ```
 http://<host:port>/dl?url=<url contains file to be downloaded>
 ```
-
 e.g.: (ziply is already deployed to herokuapp)
 ```
 https://ziply.herokuapp.com/dl?url=https://download-office.grammarly.com/latest/GrammarlyAddInSetup.exe

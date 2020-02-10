@@ -2,6 +2,13 @@
 
 zip some file and offer a zip download link
 
+## Why?
+
+Sometimes you find yourself in a restricted environement where you can not download certain type of files, for example windows binary files, using this service (on heroku as below, or by deploying it in any cloud environemnt of your choice) you can bypass such constraint and got your file compressed for free.
+
+#### Why not other online alternatives?
+This is safe. You are seeing the code and you deploying it yourself, so no chance for your binary to be trojaned by the service provider.
+
 
 ## Usage:
 
